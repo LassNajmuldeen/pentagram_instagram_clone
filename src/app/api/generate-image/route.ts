@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 
 export async function POST(request: Request) {
   try {
@@ -24,6 +25,15 @@ export async function POST(request: Request) {
         Accept: "image/jpeg"
       },
     });
+
+    // Error handling
+    if (!response.ok){
+      const errorText = await response.text();
+      console.error("API Response:", errorText);
+      throw new Error(
+        `HTTP error! status: ${response.status}, message: ${errorText}`
+      );
+    }
 
     return NextResponse.json({
       success: true,
